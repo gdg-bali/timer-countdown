@@ -1,4 +1,13 @@
-# React + TypeScript + Vite
+# Timer Countdown
+
+## NodeJS Version Environment
+
+- React = v19.0.0
+- NodeJS = v22.13.0
+- PNPM = v9.15..4
+
+
+## Description
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
