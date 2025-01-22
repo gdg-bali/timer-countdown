@@ -1,10 +1,10 @@
 # Timer Countdown
 
-## Lib Version 
+## NodeJS Version Environment
 
-- react v19.0.0
-- node v22.13.0
-- pnpm v9.15..4
+- React = v19.0.0
+- NodeJS = v22.13.0
+- PNPM = v9.15..4
 
 
 ## Description
