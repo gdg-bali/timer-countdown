@@ -1,5 +1,14 @@
 # Timer Countdown
 
+## Lib Version 
+
+- react v19.0.0
+- node v22.13.0
+- pnpm v9.15..4
+
+
+## Description
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
