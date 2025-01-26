@@ -3,10 +3,6 @@
 
 Simple countdown app for event and general use
 
-### Branch
-
-- styling
-
 ## NodeJS Version Environment
 
 - React = v19.0.0
