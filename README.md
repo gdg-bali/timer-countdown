@@ -2,10 +2,6 @@
 
 Simple countdown app for event and general use
 
-# Branch 
-
-- install ui
-
 ## NodeJS Version Environment
 
 - React = v19.0.0
