@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Button } from "./components/ui/button";
 
 function App() {
   const intervalRef = useRef(0);
@@ -78,14 +79,22 @@ function App() {
         <p>
           Timer: {hour}:{minute}:{second}
         </p>
-        <button onClick={startTimer}>Start</button>
-        <button onClick={stopTimer}>Stop</button>
+        <Button variant={"outline"} onClick={startTimer}>
+          Start
+        </Button>
+        <Button variant={"outline"} onClick={stopTimer}>
+          Stop
+        </Button>
         <br />
         <p>
           Countdown: {countdownHour}:{countdownMinute}:{countdownSecond}
         </p>
-        <button onClick={startCountdown}>Start</button>
-        <button onClick={stopCountdown}>Stop</button>
+        <Button variant={"outline"} onClick={startCountdown}>
+          Start
+        </Button>
+        <Button variant={"outline"} onClick={stopCountdown}>
+          Stop
+        </Button>
       </div>
     </>
   );
