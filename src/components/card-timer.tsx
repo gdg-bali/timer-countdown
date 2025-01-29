@@ -18,7 +18,7 @@ interface Props {
 }
 
 const CardTimer: React.FC<Props> = ({ countTimer }) => {
-  const intervalCountdownRef = useRef(0);
+  const intervalCountdownRef = useRef<NodeJS.Timeout>(undefined);
   const countTotalRef = useRef(countTimer);
 
   const [countdownSecond, setCountdownSecond] = useState("00");
