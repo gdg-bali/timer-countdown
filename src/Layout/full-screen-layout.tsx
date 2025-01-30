@@ -2,7 +2,7 @@
 import React, { useState, useRef } from "react";
 import FullScreenToggleButton from "@/components/full-screen-toggle-button";
 import { ModeToggle } from "@/components/mode-toggle";
-import { NotebookPen } from "lucide-react";
+// import { NotebookPen } from "lucide-react";
 import { Plus } from "lucide-react";
 import {
   Dialog,
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { addTimer } from "@/utils/timertemp";
 
 interface FullScreenLayoutProps {
   children: React.ReactNode;
@@ -57,6 +58,22 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
     }
   };
 
+  // ----------------------- Logic Timer ---------------------------------
+
+  const [newSeconds, setNewSeconds] = useState<number>(0);
+  const [newMinutes, setNewMinutes] = useState<number>(0);
+  const [newHours, setNewHours] = useState<number>(0);
+
+  // Add Timer
+  const handleAddTimer = () => {
+    const newTimer = newSeconds + newMinutes * 60 + newHours * 60 * 60;
+    addTimer(newTimer);
+    // reset
+    setNewSeconds(0);
+    setNewMinutes(0);
+    setNewHours(0);
+  };
+
   return (
     <div
       ref={fullScreenRef}
@@ -85,18 +102,38 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
               <DialogTitle>Add New Timer</DialogTitle>
             </DialogHeader>
             <div className="flex text-2xl gap-2 justify-center items-center">
-              <Input id="name" type="number" placeholder="00" />
+              <Input
+                onChange={(e) => setNewHours(Number(e.target.value))}
+                value={newHours}
+                id="name"
+                type="number"
+                placeholder="00"
+              />
               <span>:</span>
-              <Input id="name" type="number" placeholder="00" />
+              <Input
+                onChange={(e) => setNewMinutes(Number(e.target.value))}
+                value={newMinutes}
+                id="name"
+                type="number"
+                placeholder="00"
+              />
               <span>:</span>
-              <Input id="name" type="number" placeholder="00" />
+              <Input
+                onChange={(e) => setNewSeconds(Number(e.target.value))}
+                value={newSeconds}
+                id="name"
+                type="number"
+                placeholder="00"
+              />
             </div>
-            <div className="flex gap-4 py-2 justify-center items-center">
+            {/* <div className="flex gap-4 py-2 justify-center items-center">
               <NotebookPen />
               <Input id="name" placeholder="Add Timer Name.." />
-            </div>
+            </div> */}
             <DialogFooter>
-              <Button type="submit">Save changes</Button>
+              <Button onClick={handleAddTimer} type="submit">
+                Save changes
+              </Button>
               <Button type="submit" variant={"outline"}>
                 Cancel
               </Button>{" "}

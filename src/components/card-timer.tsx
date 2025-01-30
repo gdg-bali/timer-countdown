@@ -9,31 +9,33 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import TimerContent from "./timer-content";
-import { useRef, useState } from "react";
-import { Fullscreen, NotebookPen, PencilLine, Trash } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Fullscreen, PencilLine, Trash } from "lucide-react";
 import { Input } from "./ui/input";
 import { buttonVariants } from "@/components/ui/button";
+import { deleteTimer, updateTimer } from "@/utils/timertemp";
 
 interface Props {
   countTimer: number;
+  id: number;
 }
 
-const CardTimer: React.FC<Props> = ({ countTimer }) => {
+const CardTimer: React.FC<Props> = ({ countTimer, id }) => {
   const intervalCountdownRef = useRef<NodeJS.Timeout>(undefined);
   const countTotalRef = useRef(countTimer);
 
-  const [countdownSecond, setCountdownSecond] = useState("00");
-  const [countdownMinute, setCountdownMinute] = useState("00");
-  const [countdownHour, setCountdownHour] = useState("00");
+  const [countdownSecond, setCountdownSecond] = useState<number>(0);
+  const [countdownMinute, setCountdownMinute] = useState<number>(0);
+  const [countdownHour, setCountdownHour] = useState<number>(0);
+
+  useEffect(() => {
+    formatTime();
+  }, []);
 
   const formatTime = () => {
-    setCountdownHour(
-      String(Math.floor(countTotalRef.current / 3600)).padStart(2, "0")
-    );
-    setCountdownMinute(
-      String(Math.floor((countTotalRef.current % 3600) / 60)).padStart(2, "0")
-    );
-    setCountdownSecond(String(countTotalRef.current % 60).padStart(2, "0"));
+    setCountdownHour(Math.floor(countTotalRef.current / 3600));
+    setCountdownMinute(Math.floor((countTotalRef.current % 3600) / 60));
+    setCountdownSecond(countTotalRef.current % 60);
   };
 
   const startCountdown = () => {
@@ -58,6 +60,21 @@ const CardTimer: React.FC<Props> = ({ countTimer }) => {
   const stopCountdown = () => {
     console.log("Countdown stopped");
     clearInterval(intervalCountdownRef.current);
+  };
+
+  // Edit Timer
+  const handleUpdateTimer = () => {
+    const newTimer =
+      countdownSecond +
+      Number(countdownMinute) * 60 +
+      Number(countdownHour) * 60 * 60;
+    console.log(newTimer);
+    updateTimer(id, Number(newTimer));
+  };
+
+  // Delete Timer
+  const handleDeleteTimer = (index: number) => {
+    deleteTimer(index);
   };
 
   return (
@@ -87,9 +104,9 @@ const CardTimer: React.FC<Props> = ({ countTimer }) => {
                       {/* form */}
                       <TimerContent
                         fontSize={"20vw"}
-                        hours={countdownHour}
-                        minutes={countdownMinute}
-                        seconds={countdownSecond}
+                        hours={String(countdownHour).padStart(2, "0")}
+                        minutes={String(countdownMinute).padStart(2, "0")}
+                        seconds={String(countdownSecond).padStart(2, "0")}
                         progress={(countTotalRef.current / countTimer) * 100}
                         funcStart={startCountdown}
                         funcPause={stopCountdown}
@@ -107,28 +124,53 @@ const CardTimer: React.FC<Props> = ({ countTimer }) => {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Add New Timer</DialogTitle>
+                    <DialogTitle>Update Timer</DialogTitle>
                   </DialogHeader>
                   <div className="flex text-2xl gap-2 justify-center items-center">
-                    <Input id="name" type="number" placeholder="00" />
+                    <Input
+                      onChange={(e) => setCountdownHour(Number(e.target.value))}
+                      value={countdownHour}
+                      id="name"
+                      type="number"
+                      placeholder="00"
+                    />
                     <span>:</span>
-                    <Input id="name" type="number" placeholder="00" />
+                    <Input
+                      onChange={(e) =>
+                        setCountdownMinute(Number(e.target.value))
+                      }
+                      value={countdownMinute}
+                      id="name"
+                      type="number"
+                      placeholder="00"
+                    />
                     <span>:</span>
-                    <Input id="name" type="number" placeholder="00" />
+                    <Input
+                      onChange={(e) =>
+                        setCountdownSecond(Number(e.target.value))
+                      }
+                      value={countdownSecond}
+                      id="name"
+                      type="number"
+                      placeholder="00"
+                    />
                   </div>
-                  <div className="flex gap-4 py-2 justify-center items-center">
+                  {/* <div className="flex gap-4 py-2 justify-center items-center">
                     <NotebookPen />
                     <Input id="name" placeholder="Add Timer Name.." />
-                  </div>
+                  </div> */}
                   <DialogFooter>
                     <Button
                       type="submit"
                       variant={"outline"}
                       className="bg-red-500 text-white dark:text-black"
+                      onClick={() => handleDeleteTimer(id)}
                     >
                       <Trash />
                     </Button>
-                    <Button type="submit">Save changes</Button>
+                    <Button type="submit" onClick={handleUpdateTimer}>
+                      Save changes
+                    </Button>
                     <Button type="submit" variant={"outline"}>
                       Cancel
                     </Button>{" "}
@@ -142,9 +184,9 @@ const CardTimer: React.FC<Props> = ({ countTimer }) => {
           {/* Timer Display */}
           <TimerContent
             fontSize={"30px"}
-            hours={countdownHour}
-            minutes={countdownMinute}
-            seconds={countdownSecond}
+            hours={String(countdownHour).padStart(2, "0")}
+            minutes={String(countdownMinute).padStart(2, "0")}
+            seconds={String(countdownSecond).padStart(2, "0")}
             progress={(countTotalRef.current / countTimer) * 100}
             funcStart={startCountdown}
             funcPause={stopCountdown}
