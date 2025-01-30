@@ -10,8 +10,9 @@ import {
 import { Button } from "./ui/button";
 import TimerContent from "./timer-content";
 import { useRef, useState } from "react";
-import { Fullscreen, NotebookPen, PencilLine, Plus, Trash } from "lucide-react";
+import { Fullscreen, NotebookPen, PencilLine, Trash } from "lucide-react";
 import { Input } from "./ui/input";
+import { buttonVariants } from "@/components/ui/button";
 
 interface Props {
   countTimer: number;
@@ -61,37 +62,42 @@ const CardTimer: React.FC<Props> = ({ countTimer }) => {
 
   return (
     <>
-      <Card className="transition hover:-translate-y-1 shadow-sm hover:shadow-lg z-[10]">
+      <Card className="transition hover:-translate-y-1 border-0 shadow-md hover:shadow-lg z-[10]">
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
             <p>Timer (1)</p>
             <div>
               {/* zoom */}
-              <Button className="border-0 shadow-none" variant={"outline"}>
-                {/* Dialog */}
-                <Dialog>
-                  <DialogTrigger>
+              {/* Dialog */}
+              <Dialog>
+                <DialogTrigger>
+                  <div
+                    className={
+                      buttonVariants({ variant: "outline" }) +
+                      " border-0 shadow-none mx-2"
+                    }
+                  >
                     <Fullscreen />
-                  </DialogTrigger>
-                  <DialogContent className="min-h-screen w-full max-w-[100vw]">
-                    <DialogHeader>
-                      <DialogTitle>Timer (1)</DialogTitle>
-                      <div className="h-full flex-col flex justify-center items-center">
-                        {/* form */}
-                        <TimerContent
-                          fontSize={"20vw"}
-                          hours={countdownHour}
-                          minutes={countdownMinute}
-                          seconds={countdownSecond}
-                          progress={(countTotalRef.current / countTimer) * 100}
-                          funcStart={startCountdown}
-                          funcPause={stopCountdown}
-                        />
-                      </div>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
-              </Button>
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="min-h-screen w-full max-w-[100vw]">
+                  <DialogHeader>
+                    <DialogTitle>Timer (1)</DialogTitle>
+                    <div className="h-full flex-col flex justify-center items-center">
+                      {/* form */}
+                      <TimerContent
+                        fontSize={"20vw"}
+                        hours={countdownHour}
+                        minutes={countdownMinute}
+                        seconds={countdownSecond}
+                        progress={(countTotalRef.current / countTimer) * 100}
+                        funcStart={startCountdown}
+                        funcPause={stopCountdown}
+                      />
+                    </div>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
               {/* edit */}
               <Dialog>
                 <DialogTrigger asChild>
