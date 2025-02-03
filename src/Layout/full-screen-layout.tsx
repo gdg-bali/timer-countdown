@@ -64,46 +64,47 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
         isFullScreen ? "" : ""
       }`}
     >
-      <div className="mb-4">{children}</div>
+      <main>
+        <div className="mb-4">{children}</div>
+        <div className="fixed bottom-2 right-2 flex gap-2 z-[99]">
+          <ModeToggle />
 
-      <div className="fixed bottom-2 right-2 flex gap-2 z-[99]">
-        <ModeToggle />
-
-        <FullScreenToggleButton
-          isFullScreen={isFullScreen}
-          onToggle={toggleFullScreen}
-        />
-        {/* Button Add Form */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">
-              <Plus />
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Add New Timer</DialogTitle>
-            </DialogHeader>
-            <div className="flex text-2xl gap-2 justify-center items-center">
-              <Input id="name" type="number" placeholder="00" />
-              <span>:</span>
-              <Input id="name" type="number" placeholder="00" />
-              <span>:</span>
-              <Input id="name" type="number" placeholder="00" />
-            </div>
-            <div className="flex gap-4 py-2 justify-center items-center">
-              <NotebookPen />
-              <Input id="name" placeholder="Add Timer Name.." />
-            </div>
-            <DialogFooter>
-              <Button type="submit">Save changes</Button>
-              <Button type="submit" variant={"outline"}>
-                Cancel
-              </Button>{" "}
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
+          <FullScreenToggleButton
+            isFullScreen={isFullScreen}
+            onToggle={toggleFullScreen}
+          />
+          {/* Button Add Form */}
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                <Plus />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Add New Timer</DialogTitle>
+              </DialogHeader>
+              <div className="flex text-2xl gap-2 justify-center items-center">
+                <Input id="name" type="number" placeholder="00" />
+                <span>:</span>
+                <Input id="name" type="number" placeholder="00" />
+                <span>:</span>
+                <Input id="name" type="number" placeholder="00" />
+              </div>
+              <div className="flex gap-4 py-2 justify-center items-center">
+                <NotebookPen />
+                <Input id="name" placeholder="Add Timer Name.." />
+              </div>
+              <DialogFooter>
+                <Button type="submit">Save changes</Button>
+                <Button type="submit" variant={"outline"}>
+                  Cancel
+                </Button>{" "}
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </main>
     </div>
   );
 };
