@@ -1,103 +1,44 @@
-import { useState, useRef } from "react";
-import { Button } from "./components/ui/button";
+import CardTimer from "@/components/card-timer";
+import { ThemeProvider } from "@/components/theme-provider";
+import FullScreenLayout from "@/Layout/full-screen-layout";
 
-function App() {
-  const intervalRef = useRef(0);
-  const countRef = useRef(0);
+import { useState, useEffect } from "react";
+import { getTimers } from "@/utils/timertemp";
 
-  const [second, setSecond] = useState(0);
-  const [minute, setMinute] = useState(0);
-  const [hour, setHour] = useState(0);
+const App = () => {
+  // State for timers
+  const [timers, setTimers] = useState<number[]>([]);
 
-  const startTimer = () => {
-    console.log("Timer started");
-    intervalRef.current = setInterval(() => {
-      countRef.current += 1;
-      console.log(countRef.current);
+  // Load timers on mount
+  useEffect(() => {
+    setTimers(getTimers());
+  }, []);
 
-      if (countRef.current === 60) {
-        countRef.current = 0;
-        setSecond(0);
+  // Listen for real-time updates
+  useEffect(() => {
+    const handleStorageUpdate = () => {
+      setTimers(getTimers());
+    };
 
-        if (minute === 59) {
-          setMinute(0);
-          setHour((prev) => prev + 2);
-        } else {
-          setMinute((prev) => prev + 1);
-        }
-      }
-
-      setSecond(countRef.current);
-    }, 1000);
-  };
-
-  const stopTimer = () => {
-    console.log("Timer stopped");
-    clearInterval(intervalRef.current);
-  };
-
-  const intervalCountdownRef = useRef(0);
-  const countTotalRef = useRef(120);
-
-  const [countdownSecond, setCountdownSecond] = useState(0);
-  const [countdownMinute, setCountdownMinute] = useState(0);
-  const [countdownHour, setCountdownHour] = useState(0);
-
-  const formatTime = () => {
-    setCountdownHour(Math.floor(countTotalRef.current / 3600));
-    setCountdownMinute(Math.floor(countTotalRef.current / 60));
-    setCountdownSecond(countTotalRef.current % 60);
-  };
-
-  const startCountdown = () => {
-    // input the countdown time
-
-    formatTime();
-
-    console.log("Countdown started");
-
-    intervalCountdownRef.current = setInterval(() => {
-      countTotalRef.current -= 1;
-      console.log(countTotalRef.current);
-
-      formatTime();
-
-      if (countTotalRef.current === 0) {
-        stopCountdown();
-      }
-    }, 1000);
-  };
-
-  const stopCountdown = () => {
-    console.log("Countdown stopped");
-    clearInterval(intervalCountdownRef.current);
-  };
+    window.addEventListener("storageUpdated", handleStorageUpdate);
+    return () => {
+      window.removeEventListener("storageUpdated", handleStorageUpdate);
+    };
+  }, []);
 
   return (
-    <>
-      <div>
-        <p>
-          Timer: {hour}:{minute}:{second}
-        </p>
-        <Button variant={"outline"} onClick={startTimer}>
-          Start
-        </Button>
-        <Button variant={"outline"} onClick={stopTimer}>
-          Stop
-        </Button>
-        <br />
-        <p>
-          Countdown: {countdownHour}:{countdownMinute}:{countdownSecond}
-        </p>
-        <Button variant={"outline"} onClick={startCountdown}>
-          Start
-        </Button>
-        <Button variant={"outline"} onClick={stopCountdown}>
-          Stop
-        </Button>
-      </div>
-    </>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <FullScreenLayout>
+        <div className="bg-white dark:bg-black transition min-h-screen">
+          <div className="grid lg:grid-cols-4 grid-cols-2 gap-2 p-2">
+            {timers.map((timer, index) => (
+              <CardTimer countTimer={timer} key={index} id={index} />
+            ))}
+          </div>
+        </div>
+      </FullScreenLayout>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
