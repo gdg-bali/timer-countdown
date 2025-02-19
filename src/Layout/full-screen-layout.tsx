@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useRef } from "react";
 import FullScreenToggleButton from "@/components/full-screen-toggle-button";
-import { ModeToggle } from "@/components/mode-toggle";
+import { ModeToggle } from "@/components/theme-mode-toggle";
 // import { NotebookPen } from "lucide-react";
 import { Plus } from "lucide-react";
 import {
@@ -26,12 +25,17 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
 
   const enterFullScreen = () => {
     if (fullScreenRef.current) {
-      if (fullScreenRef.current.requestFullscreen) {
-        fullScreenRef.current.requestFullscreen();
-      } else if ((fullScreenRef.current as any).webkitRequestFullscreen) {
-        (fullScreenRef.current as any).webkitRequestFullscreen(); // Safari
-      } else if ((fullScreenRef.current as any).msRequestFullscreen) {
-        (fullScreenRef.current as any).msRequestFullscreen(); // IE11
+      const element = fullScreenRef.current as HTMLElement & {
+        webkitRequestFullscreen?: () => Promise<void>;
+        msRequestFullscreen?: () => Promise<void>;
+      };
+
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen(); // Safari
+      } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen(); // IE11
       }
       setIsFullScreen(true);
     }
@@ -39,13 +43,19 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
 
   const exitFullScreen = () => {
     if (document.fullscreenElement) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if ((document as any).webkitExitFullscreen) {
-        (document as any).webkitExitFullscreen(); // Safari
-      } else if ((document as any).msExitFullscreen) {
-        (document as any).msExitFullscreen(); // IE11
+      const doc = document as Document & {
+        webkitExitFullscreen?: () => void;
+        msExitFullscreen?: () => void;
+      };
+
+      if (doc.exitFullscreen) {
+        doc.exitFullscreen();
+      } else if (doc.webkitExitFullscreen) {
+        doc.webkitExitFullscreen(); // Safari
+      } else if (doc.msExitFullscreen) {
+        doc.msExitFullscreen(); // IE11
       }
+
       setIsFullScreen(false);
     }
   };
@@ -129,10 +139,6 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
                     placeholder="00"
                   />
                 </div>
-                {/* <div className="flex gap-4 py-2 justify-center items-center">
-              <NotebookPen />
-              <Input id="name" placeholder="Add Timer Name.." />
-            </div> */}
                 <DialogFooter>
                   <Button onClick={handleAddTimer} type="submit">
                     Save changes
