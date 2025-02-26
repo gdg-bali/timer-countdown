@@ -1,7 +1,7 @@
 import CardTimer from "@/components/card-timer";
 
 import { useState, useEffect } from "react";
-import { getTimers } from "@/utils/timertemp";
+import { getTimers } from "@/utils/timer-local-storage";
 
 const Countdown = () => {
   // State for timers

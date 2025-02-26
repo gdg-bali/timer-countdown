@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { Fullscreen, PencilLine, Trash } from "lucide-react";
 import { Input } from "./ui/input";
 import { buttonVariants } from "@/components/ui/button";
-import { deleteTimer, updateTimer } from "@/utils/timertemp";
+import { deleteTimer, updateTimer } from "@/utils/timer-local-storage";
 
 interface Props {
   countTimer: number;
