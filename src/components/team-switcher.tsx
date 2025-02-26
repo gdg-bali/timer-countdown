@@ -17,15 +17,17 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-export function TeamSwitcher({
-  teams,
-}: {
-  teams: {
-    name: string;
-    logo: React.ElementType;
-    plan: string;
-  }[];
-}) {
+interface Team {
+  name: string;
+  logo: React.ElementType;
+  plan: string;
+}
+
+interface TeamSwitcherProps {
+  teams: Team[];
+}
+
+export function TeamSwitcher({ teams }: TeamSwitcherProps) {
   const { isMobile } = useSidebar();
   const [activeTeam, setActiveTeam] = React.useState(teams[0]);
 

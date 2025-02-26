@@ -18,6 +18,10 @@ import { addTimer } from "@/utils/timer-local-storage";
 interface FullScreenLayoutProps {
   children: React.ReactNode;
 }
+interface FullScreenElement extends HTMLElement {
+  webkitRequestFullscreen?: () => Promise<void>;
+  msRequestFullscreen?: () => Promise<void>;
+}
 
 const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -25,10 +29,7 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
 
   const enterFullScreen = () => {
     if (fullScreenRef.current) {
-      const element = fullScreenRef.current as HTMLElement & {
-        webkitRequestFullscreen?: () => Promise<void>;
-        msRequestFullscreen?: () => Promise<void>;
-      };
+      const element: FullScreenElement = fullScreenRef.current;
 
       if (element.requestFullscreen) {
         element.requestFullscreen();
