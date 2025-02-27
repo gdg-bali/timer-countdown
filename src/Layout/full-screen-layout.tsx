@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useRef } from "react";
 import FullScreenToggleButton from "@/components/full-screen-toggle-button";
-import { ModeToggle } from "@/components/mode-toggle";
+import { ModeToggle } from "@/components/theme-mode-toggle";
 // import { NotebookPen } from "lucide-react";
 import { Plus } from "lucide-react";
 import {
@@ -14,10 +13,14 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { addTimer } from "@/utils/timertemp";
+import { addTimer } from "@/utils/timer-local-storage";
 
 interface FullScreenLayoutProps {
   children: React.ReactNode;
+}
+interface FullScreenElement extends HTMLElement {
+  webkitRequestFullscreen?: () => Promise<void>;
+  msRequestFullscreen?: () => Promise<void>;
 }
 
 const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
@@ -26,12 +29,14 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
 
   const enterFullScreen = () => {
     if (fullScreenRef.current) {
-      if (fullScreenRef.current.requestFullscreen) {
-        fullScreenRef.current.requestFullscreen();
-      } else if ((fullScreenRef.current as any).webkitRequestFullscreen) {
-        (fullScreenRef.current as any).webkitRequestFullscreen(); // Safari
-      } else if ((fullScreenRef.current as any).msRequestFullscreen) {
-        (fullScreenRef.current as any).msRequestFullscreen(); // IE11
+      const element: FullScreenElement = fullScreenRef.current;
+
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen(); // Safari
+      } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen(); // IE11
       }
       setIsFullScreen(true);
     }
@@ -39,13 +44,19 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
 
   const exitFullScreen = () => {
     if (document.fullscreenElement) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if ((document as any).webkitExitFullscreen) {
-        (document as any).webkitExitFullscreen(); // Safari
-      } else if ((document as any).msExitFullscreen) {
-        (document as any).msExitFullscreen(); // IE11
+      const doc = document as Document & {
+        webkitExitFullscreen?: () => void;
+        msExitFullscreen?: () => void;
+      };
+
+      if (doc.exitFullscreen) {
+        doc.exitFullscreen();
+      } else if (doc.webkitExitFullscreen) {
+        doc.webkitExitFullscreen(); // Safari
+      } else if (doc.msExitFullscreen) {
+        doc.msExitFullscreen(); // IE11
       }
+
       setIsFullScreen(false);
     }
   };
@@ -81,66 +92,67 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
         isFullScreen ? "" : ""
       }`}
     >
-      <div className="mb-4">{children}</div>
+      <main>
+        <div className="mb-4">{children}</div>
+        <div className="fixed bottom-2 right-2 flex gap-2 z-[99]">
+          <ModeToggle />
 
-      <div className="fixed bottom-2 right-2 flex gap-2 z-[99]">
-        <ModeToggle />
+          <div className="fixed bottom-2 right-2 flex gap-2 z-[99]">
+            <ModeToggle />
 
-        <FullScreenToggleButton
-          isFullScreen={isFullScreen}
-          onToggle={toggleFullScreen}
-        />
-        {/* Button Add Form */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">
-              <Plus />
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Add New Timer</DialogTitle>
-            </DialogHeader>
-            <div className="flex text-2xl gap-2 justify-center items-center">
-              <Input
-                onChange={(e) => setNewHours(Number(e.target.value))}
-                value={newHours}
-                id="name"
-                type="number"
-                placeholder="00"
-              />
-              <span>:</span>
-              <Input
-                onChange={(e) => setNewMinutes(Number(e.target.value))}
-                value={newMinutes}
-                id="name"
-                type="number"
-                placeholder="00"
-              />
-              <span>:</span>
-              <Input
-                onChange={(e) => setNewSeconds(Number(e.target.value))}
-                value={newSeconds}
-                id="name"
-                type="number"
-                placeholder="00"
-              />
-            </div>
-            {/* <div className="flex gap-4 py-2 justify-center items-center">
-              <NotebookPen />
-              <Input id="name" placeholder="Add Timer Name.." />
-            </div> */}
-            <DialogFooter>
-              <Button onClick={handleAddTimer} type="submit">
-                Save changes
-              </Button>
-              <Button type="submit" variant={"outline"}>
-                Cancel
-              </Button>{" "}
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
+            <FullScreenToggleButton
+              isFullScreen={isFullScreen}
+              onToggle={toggleFullScreen}
+            />
+            {/* Button Add Form */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  <Plus />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Add New Timer</DialogTitle>
+                </DialogHeader>
+                <div className="flex text-2xl gap-2 justify-center items-center">
+                  <Input
+                    onChange={(e) => setNewHours(Number(e.target.value))}
+                    value={newHours}
+                    id="name"
+                    type="number"
+                    placeholder="00"
+                  />
+                  <span>:</span>
+                  <Input
+                    onChange={(e) => setNewMinutes(Number(e.target.value))}
+                    value={newMinutes}
+                    id="name"
+                    type="number"
+                    placeholder="00"
+                  />
+                  <span>:</span>
+                  <Input
+                    onChange={(e) => setNewSeconds(Number(e.target.value))}
+                    value={newSeconds}
+                    id="name"
+                    type="number"
+                    placeholder="00"
+                  />
+                </div>
+                <DialogFooter>
+                  <Button onClick={handleAddTimer} type="submit">
+                    Save changes
+                  </Button>
+                  <Button type="submit" variant={"outline"}>
+                    Cancel
+                  </Button>{" "}
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
