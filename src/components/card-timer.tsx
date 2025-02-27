@@ -79,7 +79,7 @@ const CardTimer: React.FC<Props> = ({ countTimer, id }) => {
 
   return (
     <>
-      <Card className="transition hover:-translate-y-1 border-0 shadow-md hover:shadow-lg z-[10]">
+      <Card className="transition hover:-translate-y-1 border-0 shadow-md hover:shadow-lg z-10">
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
             <p>Timer (1)</p>

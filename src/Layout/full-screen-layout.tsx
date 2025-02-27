@@ -94,10 +94,10 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = ({ children }) => {
     >
       <main>
         <div className="mb-4">{children}</div>
-        <div className="fixed bottom-2 right-2 flex gap-2 z-[99]">
+        <div className="fixed bottom-2 right-2 flex gap-2 z-99">
           <ModeToggle />
 
-          <div className="fixed bottom-2 right-2 flex gap-2 z-[99]">
+          <div className="fixed bottom-2 right-2 flex gap-2 z-99">
             <ModeToggle />
 
             <FullScreenToggleButton
