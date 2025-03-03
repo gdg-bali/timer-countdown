@@ -1,7 +1,8 @@
-import CardTimer from "@/components/card-timer";
-
 import { useState, useEffect } from "react";
+//
+import CardTimer from "@/components/card-timer";
 import { getTimers } from "@/utils/timer-local-storage";
+import FullScreenLayout from "@/Layout/full-screen-layout";
 
 const Countdown = () => {
   // State for timers
@@ -24,13 +25,15 @@ const Countdown = () => {
     };
   }, []);
   return (
-    <div className="bg-white dark:bg-black transition min-h-screen">
-      <div className="grid lg:grid-cols-4 grid-cols-2 gap-2 p-2">
-        {timers.map((timer, index) => (
-          <CardTimer countTimer={timer} key={index} id={index} />
-        ))}
+    <FullScreenLayout>
+      <div className="bg-white dark:bg-black transition min-h-screen">
+        <div className="grid lg:grid-cols-4 grid-cols-2 gap-2 p-2">
+          {timers.map((timer, index) => (
+            <CardTimer countTimer={timer} key={index} id={index} />
+          ))}
+        </div>
       </div>
-    </div>
+    </FullScreenLayout>
   );
 };
 

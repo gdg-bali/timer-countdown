@@ -1,8 +1,7 @@
 import React, { useState, useRef } from "react";
-import FullScreenToggleButton from "@/components/full-screen-toggle-button";
-import { ModeToggle } from "@/components/theme-mode-toggle";
 // import { NotebookPen } from "lucide-react";
 import { Plus } from "lucide-react";
+//
 import {
   Dialog,
   DialogContent,
@@ -14,6 +13,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { addTimer } from "@/utils/timer-local-storage";
+import FullScreenToggleButton from "@/components/full-screen-toggle-button";
+import { ModeToggle } from "@/components/theme-mode-toggle";
 
 interface FullScreenLayoutProps {
   children: React.ReactNode;
