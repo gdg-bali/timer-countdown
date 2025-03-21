@@ -84,8 +84,7 @@ const CardTimer: React.FC<Props> = ({ countTimer, id }) => {
           <CardTitle className="flex justify-between items-center">
             <p>Timer (1)</p>
             <div>
-              {/* zoom */}
-              {/* Dialog */}
+              {/* Dialog Full Screen */}
               <Dialog>
                 <DialogTrigger>
                   <div
@@ -97,7 +96,7 @@ const CardTimer: React.FC<Props> = ({ countTimer, id }) => {
                     <Fullscreen />
                   </div>
                 </DialogTrigger>
-                <DialogContent className="min-h-screen w-full max-w-[100vw]">
+                <DialogContent className="min-h-screen min-w-screen w-full max-w-[100vw] z-50">
                   <DialogHeader>
                     <DialogTitle>Timer (1)</DialogTitle>
                     <div className="h-full flex-col flex justify-center items-center">
@@ -115,7 +114,8 @@ const CardTimer: React.FC<Props> = ({ countTimer, id }) => {
                   </DialogHeader>
                 </DialogContent>
               </Dialog>
-              {/* edit */}
+
+              {/* Dialog Edit */}
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="outline" className="border-none">
@@ -180,6 +180,7 @@ const CardTimer: React.FC<Props> = ({ countTimer, id }) => {
             </div>
           </CardTitle>
         </CardHeader>
+
         <CardContent>
           {/* Timer Display */}
           <TimerContent
